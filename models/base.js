@@ -52,6 +52,12 @@ class BaseSQLModel {
     return result.affectedRows;
   }
 
+  async delete(id) {
+    const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
+    const result = await this.executeQuery(query, [id]);
+    return result.affectedRows;
+  }
+
 }
 
 module.exports = BaseSQLModel;

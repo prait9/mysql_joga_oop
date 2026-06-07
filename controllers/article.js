@@ -30,6 +30,34 @@ class articleController {
     })
   }
 
+  async updateArticle(req, res){
+    const article = {
+      name: req.body.name,
+      slug: req.body.slug,
+      image: req.body.image,
+      body: req.body.body,
+      published: req.body.published,
+      author_id: req.body.author_id
+    }
+
+    const updatedRows = await articleModel.update(req.params.id, article)
+
+    res.status(200).json({
+      message: `updated article with id ${req.params.id}`,
+      updatedRows,
+      article: {id: req.params.id, ...article}
+    })
+  }
+
+  async deleteArticle(req, res){
+    const deletedRows = await articleModel.delete(req.params.id)
+
+    res.status(200).json({
+      message: `deleted article with id ${req.params.id}`,
+      deletedRows
+    })
+  }
+
 }
 
 module.exports = new articleController();
