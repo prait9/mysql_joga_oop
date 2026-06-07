@@ -2,18 +2,14 @@ const articleDbModel = require('../models/article')
 const articleModel = new articleDbModel()
 
 class articleController {
-  constructor() {
-    const articles = []
-  }
-
   async getAllArticles(req, res){
     const articles = await articleModel.findAll()
-    res.status(201).json({articles: articles})
+    res.status(200).json({articles})
   }
 
   async getArticleBySlug(req, res){
     const article = await articleModel.findOne(req.params.slug)
-    res.status(201).json({article: article})
+    res.status(200).json({article})
   }
 
   async createNewArticle(req, res){
@@ -22,7 +18,7 @@ class articleController {
       slug: req.body.slug,
       image: req.body.image,
       body: req.body.body,
-      published: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      published: req.body.published || new Date().toISOString().slice(0, 19).replace('T', ' '),
       author_id: req.body.author_id
     }
 
@@ -34,15 +30,6 @@ class articleController {
     })
   }
 
-    async deleteArticle(req, res) {
-    const articleId = req.params.id
-    const affectedRows = await articleModel.delete(articleId)
-        return res.status(200).json({
-            message: `deleted article with id ${articleId}`,
-            deleted: affectedRows
-        })
-    }
-
 }
 
-module.exports = articleController
+module.exports = new articleController();

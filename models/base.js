@@ -1,20 +1,19 @@
-const pool = require('./your-mysql-pool'); // Replace with your MySQL pool configuration
+const pool = require("../utils/db");
 
 class BaseSQLModel {
   constructor(tableName) {
     this.tableName = tableName;
   }
 
-  executeQuery(query, params) {
-    return new Promise((resolve, reject) => {
-      pool.query(query, params, (error, results) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      });
-    });
+  
+
+  async executeQuery(query, params = []) {
+    try {
+      const [results] = await pool.query(query, params);
+      return results;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findAll() {
@@ -53,11 +52,6 @@ class BaseSQLModel {
     return result.affectedRows;
   }
 
-  async delete(id) {
-    const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
-    const result = await this.executeQuery(query, [id]);
-    return result.affectedRows;
-  }
 }
 
 module.exports = BaseSQLModel;

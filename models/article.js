@@ -11,10 +11,11 @@ class ArticleModel extends BaseSQLModel {
   }
 
   async findOne(slug) {
-    const articles = await super.findAll('slug', slug);
+    const articles = await super.findOne('slug', slug);
+    return articles;
   }
 
-  async findMany(author ) {
+  async findMany(author) {
     const articles = await super.findMany('author_id', author.id);
     return articles;
   }
@@ -22,11 +23,6 @@ class ArticleModel extends BaseSQLModel {
   async create(article) {
     const createArticleId = await super.create(article);
     return createArticleId;
-  }
-
-  async delete(articleId) {
-    const deleteArticle = await super.delete(articleId);
-    return deleteArticle;
   }
 
 }

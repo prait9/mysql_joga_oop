@@ -1,6 +1,6 @@
-const baseSQLModel = require('./base');
+const BaseSQLModel = require('./base');
 
-class AuthorModel extends baseSQLModel {
+class AuthorModel extends BaseSQLModel {
   constructor() {
     super('author');
   }
