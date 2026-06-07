@@ -1,23 +1,24 @@
-const connection = require('../utils/db.js')
+const AuthorModel = require('../models/author')
+const ArticleModel = require('../models/article')
 
-const getArticlesByAuthor = (req, res) => {
-    console.log(req)
-    let query = `SELECT * FROM article WHERE author_id = ${req.params.author_id}`
+const authorModel = new AuthorModel()
+const articleModel = new ArticleModel()
 
-    connection.query(query, (err, result) => {
-        if (err) throw err
-        let articles = result
+class AuthorController {
+  async getArticlesByAuthor(req, res) {
+    const author = await authorModel.findById(req.params.author_id)
 
-        let query2 = `SELECT name FROM author WHERE id = '${articles[0].author_id}'`
+    if (!author) {
+      return res.status(404).json({ message: 'Author not found' })
+    }
 
-        connection.query(query2, (err, result2) => {
-            if (err) throw err
-            let AuthorName = result2[0].name
-            console.log(AuthorName)
-            res.render('author', {articles:articles, AuthorName:AuthorName})
-        })
-        
+    const articles = await articleModel.findMany(author)
+
+    return res.status(200).json({
+      author,
+      articles,
     })
+  }
 }
 
-module.exports =  { getArticlesByAuthor }
+module.exports = new AuthorController()
