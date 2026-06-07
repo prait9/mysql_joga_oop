@@ -14,9 +14,9 @@ class AuthorController {
 
     const articles = await articleModel.findMany(author)
 
-    return res.status(200).json({
-      author,
+    return res.status(200).render('author', {
       articles,
+      AuthorName: author.name,
     })
   }
 }
